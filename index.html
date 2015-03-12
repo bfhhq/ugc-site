@@ -1,0 +1,25 @@
+<html>
+<head><title>Demo Site</title></head>
+<body>
+<H1><a href="upload">>>>Upload</a></H1>
+<p></p>
+
+          {{range $i,  $v := $.Videos}}
+          <p>
+          	<H4>{{$v.Title}}</H4>
+          	{{$v.Description}}<br>
+
+          {{if eq $v.Url ""}}
+	          <p>>>>...In Processing...</p>
+          {{else}}
+			  <embed  height="400" width="400"  src="{{$v.Url}}" quality="high" allowScriptAccess="always"  wmode="transparent" align="middle" type="application/x-shockwave-flash" allowfullscreen="true" />
+		  {{end}}<br>
+
+            <a href="delete?name={{$v.Name}}">delete</a>
+
+          </p>
+          {{end}}
+
+
+</body>
+</html>

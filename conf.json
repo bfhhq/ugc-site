@@ -1,0 +1,6 @@
+{"AccessKey":"",
+"SecretKey":"",
+"CallbackUrl" : "http://NSQD-HOST:4151/pub?topic=bfcloud",
+"NsqdAddress":"NSQD-HOST:4150",
+"DataPath" : "data"
+}
