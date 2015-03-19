@@ -5,4 +5,5 @@ type Video struct {
 	Title       string
 	Description string `json:"desc"`
 	Url         string
+	SwfUrl      string
 }

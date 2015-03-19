@@ -50,6 +50,7 @@ func main() {
 	http.HandleFunc("/delete", delete)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	http.HandleFunc("/api/token/upload", createUploadToken)
+	http.HandleFunc("/api/video/all", videosJson)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
@@ -191,15 +192,46 @@ func createUploadToken(w http.ResponseWriter, r *http.Request) {
 	fileName := r.FormValue("name")
 	fileSize, _ := strconv.ParseInt(r.FormValue("size"), 10, 64)
 
+	if len(fileName) == 0 || fileSize == 0 {
+		http.Error(w, "name or size is empty!", http.StatusInternalServerError)
+		return
+	}
+
+	if _, ok := db.GetVideo(fileName); ok == true {
+		http.Error(w, "file already exist.", http.StatusInternalServerError)
+		return
+	}
+
+	//insert to db, so we can trace upload progress and delete file in case upload fail.
+	v := &Video{
+		Name:        fileName,
+		Title:       r.FormValue("title"),
+		Description: r.FormValue("desc"),
+	}
+
+	db.InsertVideo(v)
+
+	log.Printf("request upload token: %s  %s", v.Title, v.Name)
+
 	token := baofengcloud.CreateUploadToken(conf.AccessKey, conf.SecretKey, baofengcloud.Saas,
 		baofengcloud.Public, baofengcloud.Partial, fileName, "", fileSize, 1*time.Hour, confFile.CallbackUrl)
 
-	result := map[string]interface{}{}
-	result["token"] = token
+	//	result := map[string]interface{}{}
+	//	result["token"] = token
 
-	b, _ := json.Marshal(result)
+	//	b, _ := json.Marshal(result)
 
+	//	w.Header().Add("Content-Type", "application/json")
+
+	//	fmt.Fprint(w, string(b))
+
+	fmt.Fprint(w, token)
+}
+
+func videosJson(w http.ResponseWriter, r *http.Request) {
+	videos, _ := db.FindVideos("")
 	w.Header().Add("Content-Type", "application/json")
 
+	b, _ := json.Marshal(videos)
 	fmt.Fprint(w, string(b))
 }

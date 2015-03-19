@@ -51,7 +51,8 @@ func recvCallback(message *nsq.Message) error {
 	}
 
 	if data.Status == 0 {
-		v.Url, _ = buildSwfPlayerUrl(data.FileType, data.Url, false)
+		v.Url = data.Url
+		v.SwfUrl, _ = buildSwfPlayerUrl(data.FileType, data.Url, false)
 	} else {
 		v.Title += "(status)"
 		v.Title = fmt.Sprintf("%s (status=%d)", v.Title, data.Status)

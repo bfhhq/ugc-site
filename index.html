@@ -9,10 +9,10 @@
           	<H4>{{$v.Title}}</H4>
           	{{$v.Description}}<br>
 
-          {{if eq $v.Url ""}}
+          {{if eq $v.SwfUrl ""}}
 	          <p>>>>...In Processing...</p>
           {{else}}
-			  <embed  height="400" width="400"  src="{{$v.Url}}" quality="high" allowScriptAccess="always"  wmode="transparent" align="middle" type="application/x-shockwave-flash" allowfullscreen="true" />
+			  <embed  height="400" width="400"  src="{{$v.SwfUrl}}" quality="high" allowScriptAccess="always"  wmode="transparent" align="middle" type="application/x-shockwave-flash" allowfullscreen="true" />
 		  {{end}}<br>
 
             <a href="delete?name={{$v.Name}}">delete</a>

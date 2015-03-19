@@ -47,7 +47,7 @@ func (db *json_db) SaveVideos() error {
 
 func (db *json_db) InsertVideo(v *Video) error {
 
-	db.videos = append(db.videos, v)
+	db.videos = append([]*Video{v}, db.videos...)
 
 	return nil
 }
